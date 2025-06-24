@@ -53,6 +53,22 @@ def extract_api_requests_responses(host, username, password, log_path, start_tim
     ssh.close()
     return {'requests': api_reqs, 'responses': api_resps}
 
+def find_files_with_string(root_dir, search_string):
+    matches = []
+    for dirpath, dirnames, filenames in os.walk(root_dir):
+        for filename in filenames:
+            file_path = os.path.join(dirpath, filename)
+            try:
+                with open(file_path, 'r', errors='ignore') as f:
+                    for line in f:
+                        if search_string in line:
+                            matches.append(file_path)
+                            break  # Stop after first match in this file
+            except Exception as e:
+                # Skip files that can't be read (e.g., binaries)
+                continue
+    return matches
+
 if __name__ == "__main__":
     # Example usage: python extract_log.py <host> <username> <password> <log_path> <start_time> <end_time>
     if len(sys.argv) != 7 and len(sys.argv) != 8 and len(sys.argv) != 9:
@@ -78,3 +94,7 @@ if __name__ == "__main__":
     else:
         logs = extract_log_between_times(host, username, password, log_path, start_time, end_time)
         print(logs)
+    # Example usage:
+    # files = find_files_with_string('/path/to/search', 'your_search_string')
+    # for f in files:
+    #     print(f)

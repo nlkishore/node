@@ -52,7 +52,7 @@ def extract_api_requests_responses(host, username, password, log_path, start_tim
     api_resps = [l for l in lines if 'API Response' in l]
     ssh.close()
     return {'requests': api_reqs, 'responses': api_resps}
-
+import os
 def find_files_with_string(root_dir, search_string):
     matches = []
     for dirpath, dirnames, filenames in os.walk(root_dir):
